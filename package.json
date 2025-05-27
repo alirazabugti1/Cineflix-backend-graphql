@@ -1,0 +1,13 @@
+{
+  "name": "fake-movies-graphql",
+  "version": "1.0.0",
+  "description": "Fake GraphQL API for Movies - Backend server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "apollo-server": "^3.13.0",
+    "graphql": "^16.11.0"
+  }
+}
