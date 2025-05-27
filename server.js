@@ -1,69 +1,63 @@
-const express = require('express');
-const { graphqlHTTP } = require('express-graphql');
-const { buildSchema } = require('graphql');
-const cors = require('cors');
+const { ApolloServer, gql } = require('apollo-server');
 
-// ✅ GraphQL schema
-const schema = buildSchema(`
+// GraphQL schema
+const typeDefs = gql`
   type Movie {
-    id: ID
-    title: String
-    releaseDate: String
-    overview: String
-    poster: String
-    rating: Float
+    id: ID!
+    title: String!
+    releaseDate: String!
+    overview: String!
+    poster: String!
+    rating: Float!
   }
 
   type Query {
-    movies: [Movie]
+    movies: [Movie!]!
   }
-`);
+`;
 
-// ✅ Static movie data
+// Dummy data
 const moviesData = [
   {
     id: "1",
-    title: "Inception",
-    releaseDate: "2010-07-16",
-    overview: "A thief with the ability to enter people's dreams and steal their secrets.",
-    poster: "https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg",
-    rating: 8.8,
+    title: "The Matrix",
+    releaseDate: "1999-03-31",
+    overview: "A computer hacker learns about the true nature of his reality.",
+    poster: "https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
+    rating: 8.7
   },
   {
     id: "2",
-    title: "Interstellar",
-    releaseDate: "2014-11-07",
-    overview: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
-    poster: "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
-    rating: 8.6,
+    title: "Inception",
+    releaseDate: "2010-07-16",
+    overview: "A thief who steals corporate secrets through dream-sharing technology.",
+    poster: "https://image.tmdb.org/t/p/w500/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg",
+    rating: 8.8
   },
   {
     id: "3",
-    title: "The Dark Knight",
-    releaseDate: "2008-07-18",
-    overview: "When the menace known as the Joker wreaks havoc and chaos on Gotham, Batman must accept one of the greatest psychological and physical tests.",
-    poster: "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
-    rating: 9.0,
-  },
+    title: "Interstellar",
+    releaseDate: "2014-11-07",
+    overview: "A team travels through a wormhole in space to save humanity.",
+    poster: "https://image.tmdb.org/t/p/w500/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg",
+    rating: 8.6
+  }
 ];
 
-// ✅ Resolvers
-const root = {
-  movies: () => moviesData,
+// Resolvers
+const resolvers = {
+  Query: {
+    movies: () => moviesData,
+  },
 };
 
-// ✅ Express app
-const app = express();
-app.use(cors()); // Enable CORS
+// Apollo Server setup
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
 
-app.use('/graphql', graphqlHTTP({
-  schema,
-  rootValue: root,
-  graphiql: true, // Enable GraphiQL UI
-}));
-
-// ✅ Start the server
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}/graphql`);
+// Start server
+server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
+  console.log(`🚀 Server ready at ${url}`);
 });
