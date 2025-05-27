@@ -1,14 +1,14 @@
 const { ApolloServer, gql } = require('apollo-server');
 
-// GraphQL schema
+// Schema define karo
 const typeDefs = gql`
   type Movie {
     id: ID!
     title: String!
     releaseDate: String!
     overview: String!
-    poster: String!
-    rating: Float!
+    poster: String
+    rating: Float
   }
 
   type Query {
@@ -16,48 +16,50 @@ const typeDefs = gql`
   }
 `;
 
-// Dummy data
+// Unique movies data with poster & rating
 const moviesData = [
   {
     id: "1",
-    title: "The Matrix",
-    releaseDate: "1999-03-31",
-    overview: "A computer hacker learns about the true nature of his reality.",
-    poster: "https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
-    rating: 8.7
+    title: "Blade Runner 2049",
+    releaseDate: "2017-10-06",
+    overview: "A young blade runner uncovers a secret that leads him to Rick Deckard, a former blade runner missing for thirty years.",
+    poster: "https://image.tmdb.org/t/p/w500/aMpyrCaxJXO6HmVGx6e4J8DYYzl.jpg",
+    rating: 8.0
   },
   {
     id: "2",
-    title: "Inception",
-    releaseDate: "2010-07-16",
-    overview: "A thief who steals corporate secrets through dream-sharing technology.",
-    poster: "https://image.tmdb.org/t/p/w500/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg",
-    rating: 8.8
+    title: "The Prestige",
+    releaseDate: "2006-10-20",
+    overview: "After a tragic accident, two magicians engage in a battle to create the ultimate illusion while sacrificing everything.",
+    poster: "https://image.tmdb.org/t/p/w500/5MXyQfz8xUP3dIFPTubhTsbFY6N.jpg",
+    rating: 8.5
   },
   {
     id: "3",
-    title: "Interstellar",
-    releaseDate: "2014-11-07",
-    overview: "A team travels through a wormhole in space to save humanity.",
-    poster: "https://image.tmdb.org/t/p/w500/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg",
-    rating: 8.6
+    title: "Arrival",
+    releaseDate: "2016-11-11",
+    overview: "A linguist works with the military to communicate with alien lifeforms after mysterious spacecraft appear around the world.",
+    poster: "https://image.tmdb.org/t/p/w500/x2FJsf1ElAgr63Y3PNPtJrcmpoe.jpg",
+    rating: 7.9
+  },
+  {
+    id: "4",
+    title: "Dune",
+    releaseDate: "2021-10-22",
+    overview: "Feature adaptation of Frank Herbert's science fiction novel, about the son of a noble family entrusted with the protection of the most valuable asset in the galaxy.",
+    poster: "https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg",
+    rating: 8.2
   }
 ];
 
-// Resolvers
 const resolvers = {
   Query: {
     movies: () => moviesData,
   },
 };
 
-// Apollo Server setup
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-});
+const server = new ApolloServer({ typeDefs, resolvers });
 
-// Start server
-server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
+server.listen(process.env.PORT || 4000).then(({ url }) => {
   console.log(`🚀 Server ready at ${url}`);
 });
